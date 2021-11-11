@@ -1,6 +1,9 @@
 ﻿//IntroductionToOOP
 #include<iostream>
 using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
 
 class Point	//Создавая структуру или класс мы создаем новый тип данных
 {
@@ -23,9 +26,54 @@ public:
 	{
 		this->y = y;
 	}
+
+	//					Constructors:
+	/*Point()
+	{
+		x = y = double();	//В обе координаты ложим значение по умолчанию для double
+		cout << "DefaultConstructor:\t" << this << endl;
+	}*/
+	/*Point(double x)
+	{
+		this->x = x;
+		this->y = 0;
+		cout << "SingleArgumentConstructor:" << this << endl;
+	}*/
+	Point(double x = 0, double y = 0)
+	{
+		this->x = x;
+		this->y = y;
+		cout << "Construtor:\t" << this << endl;
+	}
+	Point(const Point& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		cout << "CopyConstructor:" << this << endl;
+	}
+	~Point()
+	{
+		cout << "Destructor:\t" << this << endl;
+	}
+
+	//					Operators:
+	Point operator=(const Point& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		cout << "CopyAssignment:\t" << this << endl;
+		return *this;
+	}
+
+	//					Methods:
+	void print()const
+	{
+		cout << "X = " << x << "\tY = " << y << endl;
+	}
 };
 
 //#define STRUCT_POINT
+//#define CONSTRUCTORS_CHECK
 
 void main()
 {
@@ -45,10 +93,37 @@ void main()
 	cout << pA->x << "\t" << pA->y << endl;
 #endif // STRUCT_POINT
 
-	Point A;
-	A.set_x(2);
-	A.set_y(3);
+#ifdef CONSTRUCTORS_CHECK
+	cout << int() << endl;	//Значение по умолчанию для int.
+	Point A;		//Default constructor
+	/*A.set_x(2);
+	A.set_y(3);*/
 	cout << A.get_x() << "\t" << A.get_y() << endl;
+
+	Point B = 5;	//Single-argument constructor
+	B.print();
+
+	Point C(7);		//Single-argument constructor
+	C.print();
+
+	Point D(4, 5);
+	D.print();
+
+	Point E = D;	//Copy constructor
+	E.print();
+
+	Point F;	//Default constructor
+	F = E;		//Copy assignment
+	F.print();
+#endif // CONSTRUCTORS_CHECK
+
+	int a, b, c;
+	a = b = c = 0;
+
+	Point A, B, C;
+	cout << "\n---------------------------------\n";
+	A = B = C = Point(2, 3);
+	cout << "\n---------------------------------\n";
 }
 
 /*
@@ -72,5 +147,19 @@ void main()
 	set-методы так же обеспечивают фильтрацию данных
 2. Наследование - Inheritance;
 3. Полиморфизм  - Polymorphism;
+------------------------------------------------------------------
+*/
+
+/*
+------------------------------------------------------------------
+1. Constructor - это метод, который создает объект;
+	-с параметрами;
+	-без параметров;
+	-конструктор по умолчанию - это конструктор, который МОЖЕТ БЫТЬ ВЫЗВАН без параметров;
+	-конструктор копирования  - это конструктор, который копирует объект;
+	-конструктор переноса;
+2. ~Destructor  - это метод, который уничтожает объект по завершении его времени жизни;
+   ~ - Tilda
+3. AssignmentOperator;
 ------------------------------------------------------------------
 */
