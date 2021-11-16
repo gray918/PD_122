@@ -64,6 +64,27 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
+	Point& operator+=(const Point& other)
+	{
+		this->x += other.x;
+		this->y += other.y;
+		return *this;
+	}
+
+	//				Increment/Decrement
+	Point& operator++()	//Prefix increment
+	{
+		x++;
+		y++;
+		return *this;
+	}
+	Point operator++(int)
+	{
+		Point old = *this;	//Сохраняем старое значение объекта
+		x++;
+		y++;
+		return old;
+	}
 
 	//					Methods:
 	double distance(const Point& other)
@@ -89,11 +110,34 @@ double distance(const Point& A, const Point& B)
 	);
 }
 
+Point operator+(const Point& left, const Point& right)
+{
+	Point result;	//Локальный объект, в который будет сохранен результат
+	result.set_x(left.get_x() + right.get_x());
+	result.set_y(left.get_y() + right.get_y());
+	return result;
+}
+Point operator-(const Point& left, const Point& right)
+{
+	Point result(left.get_x() - right.get_x(), left.get_y() - right.get_y());
+	return result;
+}
+Point operator*(const Point& left, const Point& right)
+{
+	return Point(left.get_x()*right.get_x(), left.get_y()*right.get_y());
+}
+
+ostream& operator<<(ostream& os, const Point& obj)
+{
+	os << "X = " << obj.get_x() << "\tY = " << obj.get_y();
+	return os;
+}
+
 #define delimiter "\n-----------------------------------------------\n"
 //#define STRUCT_POINT
 //#define DISTANCE_CHECK
 //#define CONSTRUCTORS_CHECK
-#define ASSIGNMENT_CHECK
+//#define ASSIGNMENT_CHECK
 
 void main()
 {
@@ -164,6 +208,35 @@ void main()
 	C.print();
 #endif // ASSIGNMENT_CHECK
 
+//#define ARITHMETICAL_OPERATORS_CHECK
+	int a = 2;
+	int b = 3;
+	int c = a + b;
+
+	Point A(2, 3);
+	Point B(3, 4);
+	A += B;
+	A.print();
+	B = A++;
+	/*A.print();
+	B.print();*/
+	cout << A << endl;
+	cout << B << endl;
+
+	/*for (Point i = 0; i.get_x() < 10; i++)
+	{
+		i.print();
+	}*/
+
+
+#ifdef ARITHMETICAL_OPERATORS_CHECK
+	Point C = A + B;
+	C.print();
+	Point D = A - B;
+	D.print();
+	(A*B).print();
+#endif // ARITHMETICAL_OPERATORS_CHECK
+
 }
 
 /*
@@ -201,5 +274,27 @@ void main()
 2. ~Destructor  - это метод, который уничтожает объект по завершении его времени жизни;
    ~ - Tilda
 3. AssignmentOperator;
+------------------------------------------------------------------
+*/
+
+/*
+------------------------------------------------------------------
+					Operators overloading rules:
+1. Перегрузить можно только существующие операторы:
+	+  перегружается;
+	++ перегружается;
+	*  перегружается;
+	** НЕ перегружается;
+2. Не все существующие операторы можно перегрузить.
+   Не перегружаются:
+   ?: - ternary;
+   :: - Scope operator (Оператор разрешения видимости)
+   .  - Point operator (Оператор прямого доступа)
+   .* - Pointer to class member operator
+   #
+   ##
+3. Перегруженные операторы сохраняют приоритет
+4. Переопределить поведение операторов 
+   над встроенными типами невозможно.
 ------------------------------------------------------------------
 */
