@@ -57,7 +57,7 @@ public:
 	}
 
 	//					Operators:
-	Point operator=(const Point& other)
+	Point& operator=(const Point& other)
 	{
 		this->x = other.x;
 		this->y = other.y;
@@ -66,14 +66,34 @@ public:
 	}
 
 	//					Methods:
+	double distance(const Point& other)
+	{
+		double x_distance = this->x - other.x;
+		double y_distance = this->y - other.y;
+		double distance = sqrt(x_distance*x_distance + y_distance * y_distance);
+		return distance;
+		//sqrt - Square Root (Квадратный корень)
+	}
 	void print()const
 	{
 		cout << "X = " << x << "\tY = " << y << endl;
 	}
 };
 
+double distance(const Point& A, const Point& B)
+{
+	return sqrt
+	(
+		pow(A.get_x() - B.get_x(), 2) + 
+		pow(A.get_y() - B.get_y(), 2)
+	);
+}
+
+#define delimiter "\n-----------------------------------------------\n"
 //#define STRUCT_POINT
+//#define DISTANCE_CHECK
 //#define CONSTRUCTORS_CHECK
+#define ASSIGNMENT_CHECK
 
 void main()
 {
@@ -92,6 +112,20 @@ void main()
 	Point* pA = &A;	//Создаем (объявляем) Указатель на Point
 	cout << pA->x << "\t" << pA->y << endl;
 #endif // STRUCT_POINT
+
+#ifdef DISTANCE_CHECK
+	Point A(2, 3);
+	Point B(3, 4);
+	cout << delimiter << endl;
+	cout << "Расстояние от точки A до точки B: " << A.distance(B) << endl;
+	cout << delimiter << endl;
+	cout << "Расстояние от точки B до точки A: " << B.distance(A) << endl;
+	cout << delimiter << endl;
+	cout << "Расстояние между точками A и B: " << distance(A, B) << endl;
+	cout << delimiter << endl;
+	cout << "Расстояние между точками B и A: " << distance(B, A) << endl;
+	cout << delimiter << endl;
+#endif // DISTANCE_CHECK
 
 #ifdef CONSTRUCTORS_CHECK
 	cout << int() << endl;	//Значение по умолчанию для int.
@@ -117,6 +151,7 @@ void main()
 	F.print();
 #endif // CONSTRUCTORS_CHECK
 
+#ifdef ASSIGNMENT_CHECK
 	int a, b, c;
 	a = b = c = 0;
 
@@ -124,6 +159,11 @@ void main()
 	cout << "\n---------------------------------\n";
 	A = B = C = Point(2, 3);
 	cout << "\n---------------------------------\n";
+	A.print();
+	B.print();
+	C.print();
+#endif // ASSIGNMENT_CHECK
+
 }
 
 /*
