@@ -1,6 +1,7 @@
 ﻿#include<iostream>
 #include<string>
 #include<ctime>
+#include<iomanip>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -43,19 +44,31 @@ public:
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
+#ifdef DEBUG
 		cout << "HConstructor:\t" << this << endl;
+#endif // DEBUG
 	}
 	virtual ~Human()
 	{
+#ifdef DEBUG
 		cout << "HDestructor:\t" << this << endl;
+#endif // DEBUG
 	}
 
 	//			Methods:
-	virtual void print()const
+	virtual std::ostream& print(std::ostream& os)const
 	{
-		cout << last_name << " " << first_name << " " << age << endl;
+		//return os << last_name << " " << first_name << " " << age;
+		return os
+			<< std::setw(15) << std::left << last_name
+			<< std::setw(10) << std::left << first_name
+			<< std::setw(5) << std::right << age;
 	}
 };
+std::ostream& operator<<(std::ostream& os, const Human& obj)
+{
+	return obj.print(os);
+}
 
 
 #define STUDENT_TAKE_PARAMETERS	const std::string& speciality, const std::string& group, double rating, double attendance
@@ -106,18 +119,26 @@ public:
 		this->group = group;
 		this->rating = rating;
 		this->attendance = attendance;
+#ifdef DEBUG
 		cout << "SConstructor:\t" << this << endl;
+#endif // DEBUG
 	}
 	~Student()
 	{
+#ifdef DEBUG
 		cout << "SDestructor:\t" << this << endl;
+#endif // DEBUG
 	}
 
 	//					Methods
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Human::print();
-		cout << speciality + " " + group << " " << rating << " " << attendance << endl;
+		//return Human::print(os)<< " " << speciality + " " + group << " " << rating << " " << attendance;
+		return Human::print(os) << " "
+			<< std::setw(25) << std::left << speciality
+			<< std::setw(10) << std::left << group
+			<< std::setw(5) << std::right << rating
+			<< std::setw(5) << std::right << attendance;
 	}
 };
 
@@ -149,23 +170,29 @@ public:
 	{
 		set_speciality(speciality);
 		set_experience(experience);
+#ifdef DEBUG
 		cout << "TConstructor:\t" << this << endl;
+#endif // DEBUG
 	}
 	~Teacher()
 	{
+#ifdef DEBUG
 		cout << "TDestructor:\t" << this << endl;
+#endif // DEBUG
 	}
 	//					Methods
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Human::print();
-		cout << speciality << " " << experience << endl;
+		//return Human::print(os)<< " " << speciality << " " << experience;
+		return Human::print(os) << " "
+			<< std::setw(35) << std::left << speciality
+			<< std::setw(5) << std::right << experience;
 	}
 };
 
 class Graduate :public Student
 {
-	std::string subject;	//Òåìà äèïëîìíîãî ïðîåêòà
+	std::string subject;	//
 public:
 	const std::string& get_subject()const
 	{
@@ -179,17 +206,20 @@ public:
 	Graduate(HUMAN_TAKE_PARAMETERS, STUDENT_TAKE_PARAMETERS, const std::string& subject) :Student(HUMAN_GIVE_PARAMETERS, STUDENT_GIVE_PARAMETERS)
 	{
 		set_subject(subject);
+#ifdef DEBUG
 		cout << "GConstructor:\t" << this << endl;
+#endif // DEBUG
 	}
 	~Graduate()
 	{
+#ifdef DEBUG
 		cout << "GDestructor:\t" << this << endl;
+#endif // DEBUG
 	}
 	//						Methods:
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Student::print();
-		cout << subject << endl;
+		return Student::print(os)<< " " << subject;
 	}
 };
 
@@ -224,7 +254,8 @@ void main()
 		cout << "\n---------------------------------------\n";
 	for (int i =0; i< sizeof(group)/sizeof(Human*); i++)
 	{
-		group[i]->print();
+		//group[i]->print();
+		cout << *group[i] << endl;
 		cout << "\n---------------------------------------\n";
 	}
 	
