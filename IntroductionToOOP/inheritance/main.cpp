@@ -256,8 +256,8 @@ void main()
 	{
 		//group[i]->print();
 		cout << *group[i] << endl;
-		cout << "\n---------------------------------------\n";
 	}
+	cout << "\n---------------------------------------\n";
 	
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
