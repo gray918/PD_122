@@ -1,4 +1,5 @@
 ﻿#include<iostream>
+#include<fstream>
 #include<string>
 #include<ctime>
 #include<iomanip>
@@ -64,12 +65,24 @@ public:
 			<< std::setw(10) << std::left << first_name
 			<< std::setw(5) << std::right << age;
 	}
+	virtual std::ofstream& print(std::ofstream& os)const
+	{
+		
+		os
+			<< std::setw(15) << std::left << last_name << ","
+			<< std::setw(10) << std::left << first_name << ","
+			<< std::setw(5) << std::right << age;
+		return os;
+	}
 };
 std::ostream& operator<<(std::ostream& os, const Human& obj)
 {
 	return obj.print(os);
 }
-
+std::ofstream& operator<<(std::ofstream& os, const Human& obj)
+{
+	return obj.print(os);
+}
 
 #define STUDENT_TAKE_PARAMETERS	const std::string& speciality, const std::string& group, double rating, double attendance
 #define STUDENT_GIVE_PARAMETERS speciality, group, rating, attendance
@@ -140,8 +153,17 @@ public:
 			<< std::setw(5) << std::right << rating
 			<< std::setw(5) << std::right << attendance;
 	}
+	std::ofstream& print(std::ofstream& os)const
+	{
+		//return Human::print(os)<< " " << speciality + " " + group << " " << rating << " " << attendance;
+		Human::print(os) << ","
+			<< std::setw(25) << std::left << speciality << ","
+			<< std::setw(10) << std::left << group << ","
+			<< std::setw(5) << std::right << rating << ","
+			<< std::setw(5) << std::right << attendance;
+		return os;
+	}
 };
-
 #define TEACHER_TAKE_PARAMETERS const std::string& speciality, unsigned int experience
 #define TEACHER_GIVE_PARAMETERS speciality, experience
 class Teacher :public Human
@@ -188,6 +210,14 @@ public:
 			<< std::setw(35) << std::left << speciality
 			<< std::setw(5) << std::right << experience;
 	}
+	std::ofstream& print(std::ofstream& os)const
+	{
+		//return Human::print(os)<< " " << speciality << " " << experience;
+		Human::print(os) << ","
+			<< std::setw(35) << std::left << speciality << ","
+			<< std::setw(5) << std::right << experience;
+		return os;
+	}
 };
 
 class Graduate :public Student
@@ -221,7 +251,15 @@ public:
 	{
 		return Student::print(os)<< " " << subject;
 	}
+
+	std::ofstream& print(std::ofstream& os)const
+	{
+		Student::print(os) << "," << subject;
+		return os;
+	}
 };
+
+
 
 //#define INHERITANCE_CHECK
 
@@ -250,6 +288,7 @@ void main()
 		new Student("Diaz", "Ricardo",55, "Weapons distribution", "Vice", 91,80),
 		new Graduate("Shrader", "Hank", 40, "Criminalistics", "OBN", 85,90, "How to catch Heisenberg"),
 		new Teacher("Einsten", "Albert", 142, "Asronomy", 110)
+		
 	};
 		cout << "\n---------------------------------------\n";
 	for (int i =0; i< sizeof(group)/sizeof(Human*); i++)
@@ -259,8 +298,23 @@ void main()
 	}
 	cout << "\n---------------------------------------\n";
 	
+	std::ofstream fout("group.txt");
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	{
+		//group[i]->print();
+		fout << typeid(*group[i]).name() << ":\t"; 
+		fout << *group[i] << ";" << endl;
+	}
+	fout.close();
+	
+	system("start  group.txt");
+	
+	
+	
+	
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		delete group[i];
 	}
+
 }
